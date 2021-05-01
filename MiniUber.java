@@ -1,3 +1,4 @@
+//https://www.lintcode.com/problem/525/
 /**
  * Definition of Trip:
  * public class Trip {
