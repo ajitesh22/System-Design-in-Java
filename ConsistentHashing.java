@@ -57,7 +57,7 @@ class MyTreeSetComparator implements Comparator<List<Integer>> {
         int rangeB = b.get(1) - b.get(0);
 
         if(rangeA!=rangeB){
-            return rangeA - rangeB;
+            return rangeB - rangeA;
         }
         return a.get(2) - b.get(2);
 
@@ -72,9 +72,3 @@ class MyNodeComparator implements Comparator<List<Integer>> {
         return a.get(0) - b.get(0);
     }
 }
-
-
-
-
-
-
