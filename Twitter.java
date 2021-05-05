@@ -1,4 +1,3 @@
-//https://leetcode.com/problems/design-twitter/
 class Tweet {
     int tweetId ;
     int userId;
@@ -61,7 +60,21 @@ class Twitter {
     /** Retrieve the 10 most recent tweet ids in the user's news feed. Each item in the news feed must be posted by users who the user followed or by the user herself. Tweets must be ordered from most recent to least recent. */
     public List<Integer> getNewsFeed(int userId) {
         
-        
+        Set<Integer> followers = followersList.get(userId);
+        if(followers == null || followers.isEmpty()){
+            return;
+        }
+        Map<Integer,PriorityQueue<Tweet>> tweetList = new HashMap<>();
+        for(Integer follower : followers){
+            PriorityQueue<Tweet> tweets = userTweets.get(follower);
+            PriorityQueue<Tweet> top10List = getTop10Tweets(tweets);
+            Iterator<Tweet> it = top10List.iterator();
+            if(!top10List.isEmpty()){
+                tweetList.put(follower,top10List);
+            }
+        }
+        return mergeTweets(tweetList);
+          
     }
     
     /** Follower follows a followee. If the operation is invalid, it should be a no-op. */
@@ -69,7 +82,7 @@ class Twitter {
         Set<Integer> followers = followersList.getOrDefault(followeeId,new HashSet<>());
         followers.add(followerId);
         followers.add(followeeId);
-        followersList.put(followeeId , followers);
+        followersList.put(followerId , followers);
         
     }
     
@@ -80,8 +93,8 @@ class Twitter {
             return;
         }
         Set<Integer> followers = followersList.getOrDefault(followeeId,new HashSet<>());
-        followers.remove(followerId);
-        followersList.put(followeeId , followers); 
+        followers.remove(followeeId);
+        followersList.put(followerId , followers); 
     }
 }
 
