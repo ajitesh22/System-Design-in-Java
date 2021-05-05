@@ -51,7 +51,6 @@ class Twitter {
         Set<Integer> followers = followersList.getOrDefault(userId,new HashSet<>());
         follower.add(userId);
         followersList.put(userId,followers);
-        
         PriorityQueue<Tweet> tweets = userTweets.getOrDefault(userId , new PriorityQueue<>(new myTweetComparator()));
         tweets.add(tweet);
         userTweets.put(userId,tweets);
@@ -67,12 +66,14 @@ class Twitter {
         Map<Integer,PriorityQueue<Tweet>> tweetList = new HashMap<>();
         for(Integer follower : followers){
             PriorityQueue<Tweet> tweets = userTweets.get(follower);
+            //TODO implementation of getTop10Tweets
             PriorityQueue<Tweet> top10List = getTop10Tweets(tweets);
             Iterator<Tweet> it = top10List.iterator();
             if(!top10List.isEmpty()){
                 tweetList.put(follower,top10List);
             }
         }
+        //TODO implementation of mergeTweets
         return mergeTweets(tweetList);
           
     }
@@ -96,7 +97,22 @@ class Twitter {
         followers.remove(followeeId);
         followersList.put(followerId , followers); 
     }
+    
+    
+    public PriorityQueue<Tweet>  getTop10Tweets(PriorityQueue<Tweet> tweets){
+        
+        
+    }
 }
+
+
+class MyTweetsComparator implements Comparator<Tweet> {
+    @Override
+    public int compare(Tweet a , Tweet b){
+        return b.timestamp - a.timestamp;
+    }
+}
+
 
 /**
  * Your Twitter object will be instantiated and called as such:
