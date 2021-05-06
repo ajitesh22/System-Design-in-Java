@@ -100,9 +100,19 @@ class Twitter {
     
     
     public PriorityQueue<Tweet>  getTop10Tweets(PriorityQueue<Tweet> tweets){
+        PriorityQueue<Tweet> top10Tweets = new PriorityQueue<>(new MyTweetsComparator());
+        for(int i=0;i<10;i++){
+            if(tweets==null || tweets.isEmpty()){
+                break;
+            }
+            top10Tweets.offer(tweets.poll());
+        }
         
-        
+        return top10Tweets;
     }
+    
+    private List<
+    
 }
 
 
