@@ -9,7 +9,7 @@ class Tweet {
     }
 
     int getTweetId(){
-        return TweetId;
+        return tweetId;
     }
     int getuserId(){
         return userId;
@@ -20,9 +20,9 @@ class Tweet {
 
 }
 
-class seqTime {
+class SeqTime {
     int time;
-    public seqTime(){
+    public SeqTime(){
         time=0;
     }
     public int getTime(){
@@ -37,8 +37,9 @@ class seqTime {
 class Twitter {
 
     /** Initialize your data structure here. */
-    private map<Integer,Set<Integer>> followersList;
-    private map<Integer,PriorityQueue<Tweet>> userTweets;
+    private Map<Integer,Set<Integer>> followersList;
+    private Map<Integer,PriorityQueue<Tweet>> userTweets;
+    SeqTime seqTime;
     public Twitter() {
         userTweets = new HashMap<>();
         followersList = new HashMap<>();
@@ -49,9 +50,9 @@ class Twitter {
     public void postTweet(int userId, int tweetId) {
         Tweet tweet = new Tweet(userId , tweetId , seqTime.getTime());
         Set<Integer> followers = followersList.getOrDefault(userId,new HashSet<>());
-        follower.add(userId);
+        followers.add(userId);
         followersList.put(userId,followers);
-        PriorityQueue<Tweet> tweets = userTweets.getOrDefault(userId , new PriorityQueue<>(new myTweetComparator()));
+        PriorityQueue<Tweet> tweets = userTweets.getOrDefault(userId , new PriorityQueue<>(new MyTweetsComparator()));
         tweets.add(tweet);
         userTweets.put(userId,tweets);
     }
@@ -61,7 +62,7 @@ class Twitter {
         
         Set<Integer> followers = followersList.get(userId);
         if(followers == null || followers.isEmpty()){
-            return;
+            return new ArrayList<>() ;
         }
         Map<Integer,PriorityQueue<Tweet>> tweetList = new HashMap<>();
         for(Integer follower : followers){
@@ -111,7 +112,32 @@ class Twitter {
         return top10Tweets;
     }
     
-    private List<
+        private List<Integer> mergeTweets(Map<Integer, PriorityQueue<Tweet>> tweetLists) {
+        List<Integer> ans = new ArrayList<>();
+        PriorityQueue<Tweet> finalPQ = new PriorityQueue<>(new MyTweetsComparator());
+        for (Integer userId : tweetLists.keySet()) {
+            PriorityQueue<Tweet> tweets = tweetLists.get(userId);
+            Tweet top = tweets.poll();
+            //tweetLists.put(userId, tweets);
+            finalPQ.offer(top);
+        }
+         
+        int count = 0;
+        while (count < 10 && !tweetLists.isEmpty()) {
+            Tweet curr = finalPQ.poll();
+            ans.add(curr.tweetId);
+            PriorityQueue<Tweet> nextTweetList = tweetLists.get(curr.userId);
+             
+            if (!nextTweetList.isEmpty()) {
+                finalPQ.offer(nextTweetList.poll());
+            } else {
+                tweetLists.remove(curr.userId);
+            }
+            count += 1;
+        }
+         
+        return ans;
+    }
     
 }
 
@@ -119,7 +145,7 @@ class Twitter {
 class MyTweetsComparator implements Comparator<Tweet> {
     @Override
     public int compare(Tweet a , Tweet b){
-        return b.timestamp - a.timestamp;
+        return b.timeStamp - a.timeStamp;
     }
 }
 
