@@ -31,7 +31,8 @@ public class phone {
 //shop.java
 public class shop {
     public static void main(String args[]){
-        //Phone phone = new Phone("Android" , 2 , "Snapdragon" , 5.0 , 5000); // problem as we need to pass all parameters in same order even when we do not require all parameters
+        //Phone phone = new Phone("Android" , 2 , "Snapdragon" , 5.0 , 5000); 
+        // problem as we need to pass all parameters in same order even when we do not require all parameters
         
         Phone phone = new PhoneBuilder()
                             .setOs("Android")
